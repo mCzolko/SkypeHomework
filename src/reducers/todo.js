@@ -1,48 +1,62 @@
 // The design is inspired by:
 // https://github.com/erikras/ducks-modular-redux
-
-const initialState = {
-  1: 'Buy car',
-  2: 'Get new clothes',
-  3: 'Be hired to Skype'
-};
+import { get, post, put, remove as requestRemove } from './../core/request'
 
 
 // Constants
+const LOAD = 'todo/LOAD'
 const ADD = 'todo/ADD'
 const EDIT = 'todo/EDIT'
 const REMOVE = 'todo/REMOVE'
 
 
 // Actions
-export const add = dispatch => value => dispatch({
-  type: ADD,
-  value
-})
-export const edit = dispatch => (id, value) => dispatch({
-  type: EDIT,
-  id,
-  value
-})
+export const load = dispatch => get().then(
+  response => dispatch({
+    type: LOAD,
+    response
+  })
+)
 
-export const remove = dispatch => id => dispatch({
-  type: REMOVE,
-  id
-})
+export const add = dispatch => value => post({
+  Description: value
+}).then(
+  response => dispatch({
+    type: ADD,
+    response
+  })
+)
+
+export const edit = dispatch => (id, value) => put(id, value).then(
+  response => dispatch({
+    type: EDIT,
+    id,
+    value
+  })
+)
+
+export const remove = dispatch => id => requestRemove(id).then(
+  response => dispatch({
+    type: REMOVE,
+    id
+  })
+)
 
 
 // Reducer
-export default (state = initialState, action) => {
-  const newState = Object.assign({}, state);
+export default (state = {}, action) => {
+  let newState = Object.assign({}, state);
 
   switch (action.type) {
 
+    case LOAD:
+      newState = {}
+      action.response.map(item => newState[item.ID] = item.Description)
+      return newState;
+
     case ADD:
-      const newId = Object.keys(state).length + 1
-      const value = action.value.trim()
-
-      if (!!value) newState[newId] = value
-
+      const { ID, Description } = action.response
+      newState[ID] = Description
       return newState
 
     case EDIT:

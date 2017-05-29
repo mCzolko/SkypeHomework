@@ -13,11 +13,11 @@ class EditableItem extends Component {
 
   assignReference = element => element && element.focus()
 
-  save = () => this.props.edit(this.props.id, this.state.value)
+  save = () => this.props.edit(this.props.id, this.state.value) && this.props.onBlur()
 
   onChange = ({ target }) => this.setState({ value: target.value })
 
-  onBlur = () => this.save() && this.props.onBlur()
+  onBlur = () => this.save()
 
   onKeyPress = ({ key }) => key === 'Enter' && this.save()
 
