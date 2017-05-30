@@ -15,7 +15,6 @@ class AddItem extends Component {
 
   onKeyPress = ({ key }) => key === 'Enter' && this.props.add(this.state.value) && this.setState({ value: '' })
 
-
   render() {
     return (
       <input type="text"

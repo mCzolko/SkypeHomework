@@ -1,4 +1,4 @@
-const apiUrl = 'http://todolistdataapi20170504011022.azurewebsites.net/api/ToDoList'
+const apiUrl = 'https://todolistdataapi20170504011022.azurewebsites.net/api/ToDoList'
 
 
 export const post = json => fetch(apiUrl, {

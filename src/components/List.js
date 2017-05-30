@@ -10,7 +10,7 @@ const List = props =>
   </ul>
 
 const mapStateToProps = state => ({
- todos: state.todo
+ todos: state.todo.current // use .current because of the state rewinding
 })
 
 export default connect(mapStateToProps)(List)

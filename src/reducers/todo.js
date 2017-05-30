@@ -1,11 +1,13 @@
 // The design is inspired by:
 // https://github.com/erikras/ducks-modular-redux
+import rewindEnhancer, { rewind, REWIND } from './rewindEnhancer'
 import { get, post, put, remove as requestRemove } from './../core/request'
 
 
 // Constants
 const LOAD = 'todo/LOAD'
 const ADD = 'todo/ADD'
+const ADD_PRE = 'todo/ADD_PRE'
 const EDIT = 'todo/EDIT'
 const REMOVE = 'todo/REMOVE'
 
@@ -18,33 +20,34 @@ export const load = dispatch => get().then(
   })
 )
 
-export const add = dispatch => value => post({
+export const add = dispatch => value => rewind(dispatch, {
+  type: ADD_PRE,
+  value
+})(post({
   Description: value
-}).then(
-  response => dispatch({
+})).then(response => {
+  dispatch({ type: REWIND })
+  dispatch({
     type: ADD,
     response
   })
-)
+})
 
-export const edit = dispatch => (id, value) => put(id, value).then(
-  response => dispatch({
-    type: EDIT,
-    id,
-    value
-  })
-)
 
-export const remove = dispatch => id => requestRemove(id).then(
-  response => dispatch({
-    type: REMOVE,
-    id
-  })
-)
+export const edit = dispatch => (id, value) => rewind(dispatch, {
+  type: EDIT,
+  id,
+  value
+})(put(id, value))
+
+export const remove = dispatch => id => rewind(dispatch, {
+  type: REMOVE,
+  id
+})(requestRemove(id))
 
 
 // Reducer
-export default (state = {}, action) => {
+const todoReducer = (state = {}, action) => {
   let newState = Object.assign({}, state);
 
   switch (action.type) {
@@ -52,7 +55,12 @@ export default (state = {}, action) => {
     case LOAD:
       newState = {}
       action.response.map(item => newState[item.ID] = item.Description)
-      return newState;
+      return newState
+
+    case ADD_PRE:
+      const id = Math.max.apply(Math, Object.keys(state)) + new Date().getUTCMilliseconds()
+      newState[id] = action.value
+      return newState
 
     case ADD:
       const { ID, Description } = action.response
@@ -72,3 +80,5 @@ export default (state = {}, action) => {
 
   }
 };
+
+export default rewindEnhancer(todoReducer)
