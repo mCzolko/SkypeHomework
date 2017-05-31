@@ -26,6 +26,7 @@ class EditableItem extends Component {
       <li>
         <input
           type="text"
+          className="Item Item--editable"
           value={this.state.value}
           ref={this.assignReference}
           onBlur={this.onBlur}

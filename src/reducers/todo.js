@@ -58,7 +58,7 @@ const todoReducer = (state = {}, action) => {
       return newState
 
     case ADD_PRE:
-      const id = Math.max.apply(Math, Object.keys(state)) + new Date().getUTCMilliseconds()
+      const id = new Date().getUTCMilliseconds()
       newState[id] = action.value
       return newState
 

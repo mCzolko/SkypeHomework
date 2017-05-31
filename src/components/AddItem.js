@@ -21,7 +21,7 @@ class AddItem extends Component {
         onChange={this.onChange}
         onKeyPress={this.onKeyPress}
         value={this.state.value}
-        placeholder="Add todo"
+        placeholder="Hit enter to add ToDo"
       />
     )
   }

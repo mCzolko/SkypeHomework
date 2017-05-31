@@ -1,0 +1,18 @@
+.Item {
+  line-height: 20px;
+  padding: 4px 0;
+  font-size: 16px;
+}
+
+.Item__description {
+  display: inline-block;
+  width: 200px;
+}
+
+.Item--editable {
+  padding: 2px 0;
+}
+
+.Item > button + button {
+  margin-left: 10px;
+}

@@ -9,7 +9,6 @@ export const rewind = (dispatch, action) => promise => {
 
   promise.catch(() => {
     dispatch({ type: REWIND })
-    console.log('reject')
     return Promise.reject
   })
 

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import EditableItem from './EditableItem'
 import { connect } from 'react-redux'
 import { remove } from './../reducers/todo'
+import './Item.css'
 
 
 class Item extends Component {
@@ -12,7 +13,7 @@ class Item extends Component {
     this.state = { editing: false }
   }
 
-  onClick = () => this.setState({ editing: true })
+  onEditClick = () => this.setState({ editing: true })
 
   onRemoveClick = () => this.props.remove(this.props.id)
 
@@ -22,9 +23,10 @@ class Item extends Component {
     return this.state.editing ?
       <EditableItem id={this.props.id} value={this.props.children} onBlur={this.onChildBlur} />
       :
-      <li>
-        <span onClick={this.onClick}>{this.props.children}</span>
-        <span onClick={this.onRemoveClick}>Remove</span>
+      <li className="Item">
+        <span className="Item__description" onClick={this.onEditClick}>{this.props.children}</span>
+        <button onClick={this.onEditClick}>Edit</button>
+        <button onClick={this.onRemoveClick}>Remove</button>
       </li>
   }
 
